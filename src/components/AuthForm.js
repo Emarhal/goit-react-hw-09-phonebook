@@ -1,70 +1,71 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { loginOperation, registerOperation } from "../redux/auth/authOperation";
 
-class AuthForm extends Component {
-  state = { name: "", email: "", password: "" };
+const initialState = {
+  name: "",
+  email: "",
+  password: "",
+};
 
-  onHandleChage = (e) => {
+const AuthForm = () => {
+  const [state, setState] = useState(initialState);
+
+  const location = useLocation();
+  const dispatch = useDispatch();
+
+  const onHandleChage = (e) => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    setState((prev) => ({ ...prev, [name]: value }));
   };
 
-  onHandleSubmit = (e) => {
+  const onHandleSubmit = (e) => {
     e.preventDefault();
 
-    // this.props.onRegister(this.state);
-    this.props.location.pathname === "/register"
-      ? this.props.onRegister(this.state)
-      : this.props.onLogin(this.state);
+    location.pathname === "/register"
+      ? dispatch(registerOperation(this.state))
+      : dispatch(loginOperation(this.state));
 
     this.setState({ name: "", email: "", password: "" });
   };
 
-  render() {
-    return (
-      <form onSubmit={this.onHandleSubmit}>
-        {this.props.location.pathname === "/register" && (
-          <label>
-            Name
-            <input
-              type="text"
-              name="name"
-              value={this.state.name}
-              onChange={this.onHandleChage}
-            />
-          </label>
-        )}
+  return (
+    <form onSubmit={onHandleSubmit}>
+      {location.pathname === "/register" && (
         <label>
-          Email
+          Name
           <input
             type="text"
-            name="email"
-            value={this.state.email}
-            onChange={this.onHandleChage}
+            name="name"
+            value={state.name}
+            onChange={onHandleChage}
           />
         </label>
-        <label>
-          Password
-          <input
-            type="text"
-            name="password"
-            value={this.state.password}
-            onChange={this.onHandleChage}
-          />
-        </label>
-        <button type="submit">
-          {this.props.location.pathname === "/register" ? "register" : "login"}
-        </button>
-      </form>
-    );
-  }
-}
-
-const mapDispatchToProps = {
-  onRegister: registerOperation,
-  onLogin: loginOperation,
+      )}
+      <label>
+        Email
+        <input
+          type="text"
+          name="email"
+          value={state.email}
+          onChange={onHandleChage}
+        />
+      </label>
+      <label>
+        Password
+        <input
+          type="text"
+          name="password"
+          value={state.password}
+          onChange={onHandleChage}
+        />
+      </label>
+      <button type="submit">
+        {location.pathname === "/register" ? "register" : "login"}
+      </button>
+    </form>
+  );
 };
 
-export default connect(null, mapDispatchToProps)(withRouter(AuthForm));
+export default AuthForm;

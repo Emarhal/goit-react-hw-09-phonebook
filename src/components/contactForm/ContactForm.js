@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./ContactForm.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { contactsItemsSelector, loadingSelector } from "../../redux/selector";
+import { contactsItemsSelector } from "../../redux/selector";
 import { addNewContacts, getAllContacts } from "../../redux/operations";
 
 const initialState = {
@@ -12,10 +12,9 @@ const initialState = {
 const ContactForm = () => {
   const [state, setState] = useState(initialState);
 
-  const { items, loading } = useSelector((state) => {
+  const { items } = useSelector((state) => {
     return {
       items: contactsItemsSelector(state),
-      loading: loadingSelector(state),
     };
   });
 
@@ -89,58 +88,3 @@ const ContactForm = () => {
 };
 
 export default ContactForm;
-
-// class ContactForm extends Component {
-
-//   state = {
-//     name: "",
-//     number: "",
-//   };
-
-//   handleSubmit = (name, number) => {
-//     const isDuplicate = this.props.items.some((item) => item.name === name);
-
-//     if (isDuplicate) {
-//       alert(name + " is already in contacts ");
-//       return;
-//     }
-
-//     const newContact = {
-//       id: uuidv4(),
-//       name: name,
-//       number: number,
-//     };
-
-//     this.props.addNewContacts(newContact);
-//   };
-
-//   handleChange = (evt) => {
-//     this.setState({
-//       [evt.target.name]: evt.target.value,
-//     });
-//   };
-
-//   onSubmit = (evt) => {
-//     evt.preventDefault();
-//     this.handleSubmit(this.state.name, this.state.number);
-//     this.setState({ name: "", number: "" });
-//   };
-//   render() {
-//     return (
-
-//     );
-//   }
-// }
-
-// const mapStateToProps = (state) => {
-//   return {
-//     items: contactsItemsSelector(state),
-//     loading: loadingSelector(state),
-//   };
-// };
-
-// const mapDispatchToProps = {
-//   addNewContacts,
-//   getAllContacts,
-// };
-// export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
