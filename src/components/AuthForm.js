@@ -24,10 +24,10 @@ const AuthForm = () => {
     e.preventDefault();
 
     location.pathname === "/register"
-      ? dispatch(registerOperation(this.state))
-      : dispatch(loginOperation(this.state));
+      ? dispatch(registerOperation(state))
+      : dispatch(loginOperation(state));
 
-    this.setState({ name: "", email: "", password: "" });
+    setState({ name: "", email: "", password: "" });
   };
 
   return (
